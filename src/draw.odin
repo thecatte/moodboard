@@ -9,6 +9,21 @@ draw :: proc() {
 	defer rl.EndDrawing()
 	rl.ClearBackground({30, 30, 30, 255})
 
+	// ── Render 3D Models to their targets ──
+	for &m in models {
+		if m.failed do continue
+
+		rl.BeginTextureMode(m.render_target)
+		rl.ClearBackground({0, 0, 0, 0}) // Transparent background
+
+		rl.BeginMode3D(m.cam)
+		m.model.transform = rl.MatrixRotateXYZ(m.rotation)
+		rl.DrawModel(m.model, {0, 0, 0}, 1.0, rl.WHITE)
+		rl.EndMode3D()
+
+		rl.EndTextureMode()
+	}
+
 	// ── World space ──
 	rl.BeginMode2D(camera)
 	{
@@ -53,6 +68,66 @@ draw :: proc() {
 					2.0 / camera.zoom,
 					{0, 180, 255, 255},
 				)
+				// Resize handle
+				hr := resize_handle_rect(
+					{r.x - pad, r.y - pad, r.width + pad * 2, r.height + pad * 2},
+				)
+				rl.DrawRectangleRec(hr, {0, 180, 255, 255})
+			}
+		}
+
+		// Draw models
+		for &m, i in models {
+			if m.failed {
+				r := model_rect(m)
+				rl.DrawRectangleLinesEx(r, 2.0 / camera.zoom, rl.RED)
+
+				text_scale := m.scale
+				rl.DrawTextEx(
+					rl.GetFontDefault(),
+					"failed to load",
+					{m.pos.x + 10 * text_scale, m.pos.y + 10 * text_scale},
+					20 * text_scale,
+					1,
+					rl.RED,
+				)
+
+				cpath := strings.clone_to_cstring(m.path, context.temp_allocator)
+				rl.DrawTextEx(
+					rl.GetFontDefault(),
+					cpath,
+					{m.pos.x + 10 * text_scale, m.pos.y + 40 * text_scale},
+					14 * text_scale,
+					1,
+					rl.RED,
+				)
+			} else {
+				r := model_rect(m)
+				source := rl.Rectangle {
+					0,
+					0,
+					f32(m.render_target.texture.width),
+					-f32(m.render_target.texture.height),
+				}
+				dest := r
+				origin := rl.Vector2{0, 0}
+				rl.DrawTexturePro(m.render_target.texture, source, dest, origin, 0.0, rl.WHITE)
+			}
+
+			// Selection border
+			if selection.kind == .Model && selection.index == i {
+				r := model_rect(m)
+				pad: f32 = m.failed ? 4.0 : 0.0
+				rl.DrawRectangleLinesEx(
+					{r.x - pad, r.y - pad, r.width + pad * 2, r.height + pad * 2},
+					2.0 / camera.zoom,
+					{0, 180, 255, 255},
+				)
+				// Resize handle
+				hr := resize_handle_rect(
+					{r.x - pad, r.y - pad, r.width + pad * 2, r.height + pad * 2},
+				)
+				rl.DrawRectangleRec(hr, {0, 180, 255, 255})
 			}
 		}
 
@@ -70,6 +145,11 @@ draw :: proc() {
 					2.0 / camera.zoom,
 					{0, 180, 255, 255},
 				)
+				// Resize handle
+				hr := resize_handle_rect(
+					{r.x - pad, r.y - pad, r.width + pad * 2, r.height + pad * 2},
+				)
+				rl.DrawRectangleRec(hr, {0, 180, 255, 255})
 			}
 		}
 	}
@@ -119,8 +199,9 @@ draw_hud :: proc() {
 	gap: i32 = 20
 	color :: rl.Color{200, 200, 200, 180}
 
-	rl.DrawText("Drag & drop images onto the window", 10, y, 16, color); y += gap
-	rl.DrawText("LMB: select / move  |  Scroll: scale selected / zoom", 10, y, 16, color); y += gap
+	rl.DrawText("Drag & drop images/3D models onto the window", 10, y, 16, color); y += gap
+	rl.DrawText("LMB: select / move  |  Scroll: zoom canvas", 10, y, 16, color); y += gap
+	rl.DrawText("Shift+Scroll: zoom 3D model  |  RMB: rotate 3D model", 10, y, 16, color); y += gap
 	rl.DrawText("MMB: pan  |  T: add text  |  X: delete selected", 10, y, 16, color); y += gap
 	rl.DrawText("Ctrl+S: save  |  Ctrl+L: load  |  Ctrl+E: export PNG", 10, y, 16, color); y += gap
 

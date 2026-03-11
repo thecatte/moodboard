@@ -40,3 +40,17 @@ text_rect :: proc(t: BoardText) -> rl.Rectangle {
 point_in_rect :: proc(p: rl.Vector2, r: rl.Rectangle) -> bool {
 	return p.x >= r.x && p.x <= r.x + r.width && p.y >= r.y && p.y <= r.y + r.height
 }
+
+model_rect :: proc(m: BoardModel) -> rl.Rectangle {
+	w := f32(500) * m.scale
+	h := f32(500) * m.scale
+	return {m.pos.x, m.pos.y, w, h}
+}
+
+// Returns a small square handle at the bottom-right corner of a rect.
+// The handle size is expressed in world units based on camera zoom so it
+// stays a constant size on screen (~14px).
+resize_handle_rect :: proc(r: rl.Rectangle) -> rl.Rectangle {
+	sz := 22.0 / camera.zoom
+	return {r.x + r.width - sz / 2, r.y + r.height - sz / 2, sz, sz}
+}

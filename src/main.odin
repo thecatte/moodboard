@@ -22,6 +22,7 @@ main :: proc() {
 
 	images = make([dynamic]BoardImage)
 	texts = make([dynamic]BoardText)
+	models = make([dynamic]BoardModel)
 
 	if len(os.args) > 1 {
 		save_file_path = os.args[1]
@@ -86,6 +87,13 @@ main :: proc() {
 		delete(img.path)
 	}
 	delete(images)
+
+	for &m in models {
+		if m.model.meshCount > 0 do rl.UnloadModel(m.model)
+		if m.render_target.id > 0 do rl.UnloadRenderTexture(m.render_target)
+		delete(m.path)
+	}
+	delete(models)
 
 	for &t in texts {
 		delete(t.content)

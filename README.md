@@ -7,24 +7,32 @@ Moodboard allows you to quickly lay out images and text on an infinite 2D canvas
 ## Features
 
 - **Infinite Canvas**: Pan and zoom around a free-form workspace.
-- **Drag & Drop support**: Easily drag images from your file manager directly into the application window.
-- **Rich Media**: Supports loading and scaling different image formats (.png, .jpg) via Raylib.
+- **Drag & Drop support**: Easily drag images (.png, .jpg) or **3D models** (.obj, .gltf, .glb) directly into the application window.
+- **3D Model Integration**: Models are rendered into 2D frames that can be moved and scaled alongside images.
+- **Interactive Manipulation**:
+    - **Resize Handles**: Drag the blue handle at the bottom-right of any item to scale it proportionally.
+    - **Quick Reset**: Double-click a resize handle to restore an item's original size.
+    - **3D Rotation**: Right-click and drag a selected 3D model to rotate it in space.
+    - **Camera Zoom**: Shift + Scroll on a selected model to zoom its internal 3D camera.
 - **Text Annotation**: Click to type text notes anywhere on the board.
-- **JSON-like Save System**: Boards are saved to a plain text `.moodboard` format, making them easy to track, backup, or share.
-- **Auto-Export to PNG**: Render your entire board to a high-quality `.png` image with a single keystroke.
-- **Lightweight**: Written in systems-level Odin, it consumes minimal resources and launches instantly.
+- **Robust Save System**: Boards are saved to a plain text `.moodboard` format.
+- **Auto-Export to PNG**: Render your entire board to a high-quality `.png` image with a single keystroke (`Ctrl+E`).
 
-![screenshot](screenshots/screenshot1.png "Moodboard Screenshot")
+![screenshot](screenshots/screenshot1.png "Moodboard Screenshot 1")
+![screenshot](screenshots/screenshot2.png "Moodboard Screenshot 2")
 
 
 ## Controls
 
 | Action | Input |
 | --- | --- |
-| **Select / Move item** | `Left Mouse Button` (Hold & Drag) |
+| **Select / Move item** | `Left Mouse Button` (Click & Drag) |
+| **Resize Item** | `Left Mouse Button` on **Blue Handle** (Drag) |
+| **Reset Size** | `Double Click` on **Blue Handle** |
+| **Rotate 3D Model** | `Right Mouse Button` (while model selected) |
+| **3D Camera Zoom** | `Shift + Mouse Wheel` (while model selected) |
 | **Pan camera** | `Middle Mouse Button` (Hold & Drag) |
-| **Scale Selection** | `Mouse Wheel` (while an image is selected) |
-| **Zoom in / out** | `Mouse Wheel` |
+| **Zoom Canvas** | `Mouse Wheel` |
 | **Reset Zoom (1x)** | `1` |
 | **Set Zoom (0.5x)** | `2` |
 | **Center Camera** | `C` |
