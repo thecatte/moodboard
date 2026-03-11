@@ -14,6 +14,9 @@ Moodboard allows you to quickly lay out images and text on an infinite 2D canvas
 - **Auto-Export to PNG**: Render your entire board to a high-quality `.png` image with a single keystroke.
 - **Lightweight**: Written in systems-level Odin, it consumes minimal resources and launches instantly.
 
+![screenshot](screenshots/screenshot1.png "Moodboard Screenshot")
+
+
 ## Controls
 
 | Action | Input |
@@ -65,6 +68,7 @@ To load an existing board file, simply pass the path as an argument:
 
 ## Known Limitations
 
+- **This is slopware, use at your own risk.**
 - Multi-line text inputs are not currently supported in the typing interface natively.
 - Image paths in `.moodboard` files are saved as absolute paths from where they were dragged. Moving the image files externally may cause them to display as "failed to load".
 
