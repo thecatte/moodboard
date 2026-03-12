@@ -80,6 +80,8 @@ To load an existing board file, simply pass the path as an argument:
 - Multi-line text inputs are not currently supported in the typing interface natively.
 - Image paths in `.moodboard` files are saved as absolute paths from where they were dragged. Moving the image files externally may cause them to display as "failed to load".
 
+Probably should be refactored but for now treat is as vibe coded proof of concept.
+
 ## License
 
 This project is open-source. Feel free to use, modify, and distribute!
